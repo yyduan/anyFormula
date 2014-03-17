@@ -21,7 +21,9 @@ package com.anysoft.formula;
  * 
  * @author duanyy
  * @version 1.0.0
- * 
+ * @version 1.0.1
+ *     + {@link DataProvider#getValue(String, Object, String) getValue}函数的返回类型修改为String
+ *     + {@link DataProvider#getValue(String, Object, String) getValue}函数增加缺省值参数
  */
 public interface DataProvider {
 	/**
@@ -29,9 +31,10 @@ public interface DataProvider {
 	 * 
 	 * @param varName 变量名
 	 * @param context 上下文 {@link #getContext(String) getContext}
+	 * @param defaultValue 缺省值
 	 * @return 变量值
 	 */
-	public ExprValue getValue(String varName,Object context);
+	public String getValue(String varName,Object context,String defaultValue);
 	
 	/**
 	 * 创建变量的上下文

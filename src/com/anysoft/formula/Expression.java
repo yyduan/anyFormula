@@ -517,6 +517,8 @@ abstract public class Expression {
 	 * Variant
 	 * @author duanyy
 	 * @version 1.0.0
+	 * @version 1.0.1
+	 * - @link com.anysoft.formula.DataProvider}进行了修改
 	 */
 	public static class Variant extends Expression{
 		protected String varName;
@@ -535,7 +537,8 @@ abstract public class Expression {
 			if (varContext == null){
 				varContext = provider.getContext(varName);
 			}
-			return provider.getValue(varName,varContext);
+			String value = provider.getValue(varName, varContext, null);
+			return value != null ? new ExprValue(value): null;
 		}
 
 		@Override
