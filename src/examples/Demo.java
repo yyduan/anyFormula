@@ -2,8 +2,8 @@ package examples;
 
 import java.util.Date;
 
+import com.anysoft.formula.DateUtil;
 import com.anysoft.formula.DefaultFunctionHelper;
-import com.anysoft.formula.ExprValue;
 import com.anysoft.formula.Expression;
 import com.anysoft.formula.Function;
 import com.anysoft.formula.Parser;
@@ -26,16 +26,16 @@ public class Demo {
 	public static void withDataProvider(String[]args){
 		Parser parser = new Parser();
 		
-		String formula = "1+2+id";
+		String formula = "1+2+to_long(id)";
 		
 		Expression expr = parser.parse(formula);
 		
 		System.out.println(expr.toString());
 		System.out.println(expr.getValue(new DataProvider(){
 			@Override
-			public ExprValue getValue(String varName, Object context) {
+			public String getValue(String varName, Object context,String defaultValue) {
 				if (varName.equals("id")){
-					return new ExprValue(100);
+					return "100";
 				}
 				return null;
 			}
@@ -77,15 +77,15 @@ public class Demo {
 	public static void testNvl(String [] args){
 		DefaultFunctionHelper functionHelper = new DefaultFunctionHelper();
 		Parser parser = new Parser(functionHelper);
-		String formula = "nvl(null_var,1000) + nvl(id,20)";
+		String formula = "nvl(null_var,1000) + to_long(nvl(id,'20'))";
 		Expression expr = parser.parse(formula);
 		
 		System.out.println(expr.toString());
 		System.out.println(expr.getValue(new DataProvider(){
 			@Override
-			public ExprValue getValue(String varName, Object context) {
+			public String getValue(String varName, Object context,String defaultValue) {
 				if (varName.equals("id")){
-					return new ExprValue(100);
+					return "100";
 				}
 				return null;
 			}
@@ -98,15 +98,15 @@ public class Demo {
 	public static void testDate(String [] args){
 		DefaultFunctionHelper functionHelper = new DefaultFunctionHelper();
 		Parser parser = new Parser(functionHelper);
-		String formula = "to_char(now,'yyyyMMdd') + to_date('20120101','yyyyMMdd')";
+		String formula = "to_char(to_date(now,'yyyyMMdd'),'yyyyMMddhh24miss')";
 		Expression expr = parser.parse(formula);
 		
 		System.out.println(expr.toString());
 		System.out.println(expr.getValue(new DataProvider(){
 			@Override
-			public ExprValue getValue(String varName, Object context) {
+			public String getValue(String varName, Object context,String defaultValue) {
 				if (varName.equals("now")){
-					return new ExprValue(new Date());
+					return DateUtil.formatDate(new Date(), "yyyyMMdd");
 				}
 				return null;
 			}
@@ -126,9 +126,9 @@ public class Demo {
 		System.out.println(expr.toString());
 		System.out.println(expr.getValue(new DataProvider(){
 			@Override
-			public ExprValue getValue(String varName, Object context) {
+			public String getValue(String varName, Object context,String defaultValue) {
 				if (varName.equals("hello")){
-					return new ExprValue("Hello world");
+					return "Hello world";
 				}
 				return null;
 			}
@@ -140,6 +140,6 @@ public class Demo {
 	}	
 	
 	public static void main(String[]args){
-		testString(args);
+		testDate(args);
 	}	
 }
